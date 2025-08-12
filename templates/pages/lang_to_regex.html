@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <h1>Language to Regular Expression Converter</h1>
+  <p>Convert formal language descriptions to regular expressions using systematic approaches.</p>
+  
+  <div class="two-col">
+    <div class="left">
+      <h3>Language Description</h3>
+      <textarea id="language-input" placeholder="Describe your language here...
+Examples:
+- All strings over {a,b} that start with 'a' and end with 'b'
+- Binary strings with even number of 1s
+- Strings over {0,1} that don't contain '11' as substring
+
+Or use set notation:
+- {a^n b^m | n,m ≥ 0}
+- {w | w ∈ {0,1}* and |w| is even}"></textarea>
+      
+      <div class="controls">
+        <button id="example-btn">Load Example</button>
+        <button id="clear-btn">Clear</button>
+        <button id="convert-btn">Convert to Regex</button>
+      </div>
+    </div>
+    
+    <div class="right">
+      <h3>Results</h3>
+      <div id="results"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/pages/lang_to_regex.js"></script>
+{% endblock %}

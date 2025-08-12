@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <h1>Left Recursion Elimination</h1>
+    <p>Eliminate left recursion from your context-free grammar to make it suitable for top-down parsing.</p>
+  </div>
+  
+  <div class="two-col">
+    <div class="left">
+      <div class="input-section">
+        <h3>Input Grammar</h3>
+        <p class="input-help">Enter your context-free grammar using -> for productions and | for alternatives</p>
+        <textarea id="grammar-input" placeholder="Enter your grammar here...
+Example:
+E -> E + T | T
+T -> T * F | F
+F -> ( E ) | id
+
+Use -> for productions and | for alternatives"></textarea>
+        
+        <div class="controls">
+          <button id="example-btn" class="btn-secondary">Load Example</button>
+          <button id="clear-btn" class="btn-secondary">Clear</button>
+          <button id="eliminate-btn" class="btn-primary">Eliminate Left Recursion</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="right">
+      <div class="results-container">
+        <h3>Results</h3>
+        <div id="results" class="results-content">
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>Enter a grammar and click "Eliminate Left Recursion" to see the results</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/pages/left_recursion.js"></script>
+{% endblock %}

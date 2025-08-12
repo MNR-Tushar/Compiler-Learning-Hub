@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <h1>Regular Expression to Language Converter</h1>
+  <p>Convert regular expressions to formal language descriptions and understand what they represent.</p>
+  
+  <div class="two-col">
+    <div class="left">
+      <h3>Regular Expression</h3>
+      <textarea id="regex-input" placeholder="Enter your regular expression here...
+Examples:
+- a(a|b)*b
+- (0*10*10*)*
+- (0|10)*
+- (a|b)*abb
+
+Use standard regex syntax with | for alternation, * for Kleene star, + for one or more, ? for optional"></textarea>
+      
+      <div class="controls">
+        <button id="example-btn">Load Example</button>
+        <button id="clear-btn">Clear</button>
+        <button id="convert-btn">Convert to Language</button>
+      </div>
+    </div>
+    
+    <div class="right">
+      <h3>Results</h3>
+      <div id="results"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/pages/regex_to_lang.js"></script>
+{% endblock %}

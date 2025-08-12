@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home-container">
+  <header class="home-hero">
+    <div class="hero-content">
+      <div class="hero-icon">
+        <i class="fas fa-code"></i>
+      </div>
+      <h1>Welcome to Compiler Learning Hub</h1>
+      <p class="hero-subtitle">Master compiler theory through interactive tools, visualizations, and hands-on practice</p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <i class="fas fa-tools"></i>
+          <span>10 Tools</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-graduation-cap"></i>
+          <span>Complete Coverage</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-mobile-alt"></i>
+          <span>Mobile Ready</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="features-section">
+    <h2>Learning Tools</h2>
+    <div class="home-grid">
+      <a class="card" href="/first-follow">
+        <div class="card-icon">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <h3>FIRST & FOLLOW Sets</h3>
+        <p>Compute FIRST and FOLLOW sets for context-free grammars and generate LL(1) parsing tables</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/ambiguity">
+        <div class="card-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Ambiguity Checker</h3>
+        <p>Detect and analyze grammar ambiguity through systematic conflict detection</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/left-recursion">
+        <div class="card-icon">
+          <i class="fas fa-undo"></i>
+        </div>
+        <h3>Left Recursion</h3>
+        <p>Eliminate direct and indirect left recursion to make grammars suitable for top-down parsing</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/left-factoring">
+        <div class="card-icon">
+          <i class="fas fa-cut"></i>
+        </div>
+        <h3>Left Factoring</h3>
+        <p>Apply left factoring to eliminate common prefixes and improve parsing efficiency</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/lang-to-regex">
+        <div class="card-icon">
+          <i class="fas fa-language"></i>
+        </div>
+        <h3>Language → Regex</h3>
+        <p>Convert formal language descriptions to regular expressions using systematic approaches</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/regex-to-lang">
+        <div class="card-icon">
+          <i class="fas fa-regex"></i>
+        </div>
+        <h3>Regex → Language</h3>
+        <p>Understand what regular expressions represent and convert them to formal language descriptions</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/lr0">
+        <div class="card-icon">
+          <i class="fas fa-table"></i>
+        </div>
+        <h3>LR(0) Parser</h3>
+        <p>Generate LR(0) parsing tables and analyze shift-reduce conflicts for bottom-up parsing</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/tac">
+        <div class="card-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3>Three Address Code</h3>
+        <p>Convert arithmetic expressions and statements to three address code representation</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/cfg">
+        <div class="card-icon">
+          <i class="fas fa-project-diagram"></i>
+        </div>
+        <h3>Control Flow Graph</h3>
+        <p>Generate control flow graphs from three address code with basic block analysis</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="about-section">
+    <div class="about-content">
+      <h2>Why Compiler Learning Hub?</h2>
+      <div class="about-grid">
+        <div class="about-item">
+          <div class="about-icon">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h3>Interactive Learning</h3>
+          <p>Learn by doing with hands-on tools that make abstract concepts concrete</p>
+        </div>
+        <div class="about-item">
+          <div class="about-icon">
+            <i class="fas fa-eye"></i>
+          </div>
+          <h3>Visual Understanding</h3>
+          <p>See algorithms in action with tables, graphs, and step-by-step visualizations</p>
+        </div>
+        <div class="about-item">
+          <div class="about-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3>Learn Anywhere</h3>
+          <p>Access all tools on any device with our responsive, mobile-first design</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

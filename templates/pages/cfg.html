@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <h1>Control Flow Graph Generator</h1>
+  <p>Generate control flow graphs from three address code and analyze basic blocks.</p>
+  
+  <div class="two-col">
+    <div class="left">
+      <h3>Input Three Address Code</h3>
+      <textarea id="tac-input" placeholder="Enter your three address code here...
+Example:
+1: t1 = a + b
+2: t2 = t1 * c
+3: if t2 > 0 goto 6
+4: t3 = t2 + 1
+5: goto 7
+6: t3 = t2 - 1
+7: x = t3
+
+Each line should be numbered and contain a single TAC instruction"></textarea>
+      
+      <div class="controls">
+        <button id="example-btn">Load Example</button>
+        <button id="clear-btn">Clear</button>
+        <button id="generate-btn">Generate CFG</button>
+      </div>
+    </div>
+    
+    <div class="right">
+      <h3>Results</h3>
+      <div id="results"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/pages/cfg.js"></script>
+{% endblock %}
