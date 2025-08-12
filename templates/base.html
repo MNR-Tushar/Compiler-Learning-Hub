@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Compiler Learning Hub{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <nav class="topnav">
+    <div class="nav-container">
+      <div class="brand">
+        <i class="fas fa-code"></i>
+        <span>Compiler Learning Hub</span>
+      </div>
+      
+      <ul class="navlinks">
+        <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="/first-follow" class="nav-link"><i class="fas fa-calculator"></i> FIRST & FOLLOW</a></li>
+        <li><a href="/ambiguity" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Ambiguity</a></li>
+        <li><a href="/left-recursion" class="nav-link"><i class="fas fa-undo"></i> Left Recursion</a></li>
+        <li><a href="/left-factoring" class="nav-link"><i class="fas fa-cut"></i> Left Factoring</a></li>
+        <li><a href="/lang-to-regex" class="nav-link"><i class="fas fa-language"></i> Lang → Regex</a></li>
+        <li><a href="/regex-to-lang" class="nav-link"><i class="fas fa-regex"></i> Regex → Lang</a></li>
+        <li><a href="/lr0" class="nav-link"><i class="fas fa-table"></i> LR(0)</a></li>
+        <li><a href="/tac" class="nav-link"><i class="fas fa-code"></i> TAC</a></li>
+        <li><a href="/cfg" class="nav-link"><i class="fas fa-project-diagram"></i> CFG</a></li>
+      </ul>
+      
+      <div class="nav-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4><i class="fas fa-graduation-cap"></i> Compiler Learning Hub</h4>
+        <p>Interactive tools for learning compiler theory and language design</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/first-follow">FIRST & FOLLOW</a></li>
+          <li><a href="/ambiguity">Ambiguity Checker</a></li>
+          <li><a href="/lr0">LR(0) Parser</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Features</h4>
+        <ul>
+          <li>Grammar Analysis</li>
+          <li>Parsing Algorithms</li>
+          <li>Code Generation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Made with <i class="fas fa-heart"></i> for the Compiler Learning Community</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+  
+  <script>
+    // Mobile navigation toggle
+    document.querySelector('.nav-toggle').addEventListener('click', function() {
+      document.querySelector('.navlinks').classList.toggle('active');
+    });
+    
+    // Active navigation highlighting
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>

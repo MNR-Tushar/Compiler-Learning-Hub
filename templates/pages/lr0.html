@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <h1>LR(0) Parser Generator</h1>
+  <p>Generate LR(0) parsing tables and analyze shift-reduce conflicts for your context-free grammar.</p>
+  
+  <div class="two-col">
+    <div class="left">
+      <h3>Input Grammar</h3>
+      <textarea id="grammar-input" placeholder="Enter your grammar here...
+Example:
+E → E + T | T
+T → T * F | F
+F → ( E ) | id
+
+Use → for productions and | for alternatives"></textarea>
+      
+      <div class="controls">
+        <button id="example-btn">Load Example</button>
+        <button id="clear-btn">Clear</button>
+        <button id="generate-btn">Generate LR(0) Table</button>
+      </div>
+    </div>
+    
+    <div class="right">
+      <h3>Results</h3>
+      <div id="results"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/pages/lr0.js"></script>
+{% endblock %}

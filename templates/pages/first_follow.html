@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <h1>FIRST & FOLLOW Sets & LL(1) Parser</h1>
+    <p>Compute FIRST and FOLLOW sets for context-free grammars and generate LL(1) parsing tables.</p>
+  </div>
+  
+  <div class="two-col">
+    <div class="left">
+      <div class="input-section">
+        <h3>Input Grammar</h3>
+        <p class="input-help">Enter your context-free grammar using -> for productions and | for alternatives</p>
+        <textarea id="grammar-input" placeholder="Enter your grammar here...
+Example:
+E -> T E'
+E' -> + T E' | ε
+T -> F T'
+T' -> * F T' | ε
+F -> ( E ) | id"></textarea>
+        
+        <div class="input-group">
+          <label for="start-symbol">Start Symbol:</label>
+          <input type="text" id="start-symbol" placeholder="E" />
+        </div>
+      </div>
+      
+      <div class="controls">
+        <button id="example1-btn" class="btn-secondary">Example 1: Arithmetic</button>
+        <button id="example2-btn" class="btn-secondary">Example 2: If-Else</button>
+        <button id="example3-btn" class="btn-secondary">Example 3: Assignment</button>
+        <button id="example4-btn" class="btn-secondary">Example 4: Lists</button>
+        <button id="clear-btn" class="btn-secondary">Clear</button>
+        <button id="compute-btn" class="btn-primary">Compute FIRST & FOLLOW</button>
+      </div>
+    </div>
+    
+    <div class="right">
+      <div class="results-container">
+        <h3>Results</h3>
+        <div id="results" class="results-content">
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>Enter a grammar and click "Compute" to see the results</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/pages/first_follow.js"></script>
+{% endblock %}

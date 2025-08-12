@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <h1>Left Factoring</h1>
+  <p>Apply left factoring to your context-free grammar to eliminate common prefixes in productions.</p>
+  
+  <div class="two-col">
+    <div class="left">
+      <h3>Input Grammar</h3>
+      <textarea id="grammar-input" placeholder="Enter your grammar here...
+Example:
+S → iEtS | iEtSeS | a
+E → b
+
+Use → for productions and | for alternatives"></textarea>
+      
+      <div class="controls">
+        <button id="example-btn">Load Example</button>
+        <button id="clear-btn">Clear</button>
+        <button id="factor-btn">Apply Left Factoring</button>
+      </div>
+    </div>
+    
+    <div class="right">
+      <h3>Results</h3>
+      <div id="results"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/pages/left_factoring.js"></script>
+{% endblock %}
