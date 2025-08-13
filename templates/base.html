@@ -10,30 +10,41 @@
 </head>
 <body>
   <nav class="topnav">
-    <div class="nav-container">
-      <div class="brand">
-        <i class="fas fa-code"></i>
-        <span>Compiler Learning Hub</span>
-      </div>
-      
-      <ul class="navlinks">
+  <div class="nav-container">
+    <div class="brand">
+      <i class="fas fa-code"></i>
+      <span>Compiler Learning Hub</span>
+    </div>
+
+    <ul class="navlinks">
+      {% if request.path == '/' %}
+        <!-- Home page navbar -->
+          <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="/tools" class="nav-link"><i class="fas fa-tools"></i> Tools</a></li>
+          <li><a href="/about" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+          <li><a href="https://github.com/MNR-Tushar/Compiler-Learning-Hub" target="_blank" class="github-btn"><i class="fab fa-github"></i> Code
+      </a></li>
+          
+      {% else %}
+        <!-- All pages (Tools page, etc.) -->
         <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="/first-follow" class="nav-link"><i class="fas fa-calculator"></i> FIRST & FOLLOW</a></li>
+        <li><a href="/first-follow" class="nav-link"><i class="fas fa-calculator"></i> FIRST, FOLLOW & LL(1)</a></li>
         <li><a href="/ambiguity" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Ambiguity</a></li>
         <li><a href="/left-recursion" class="nav-link"><i class="fas fa-undo"></i> Left Recursion</a></li>
         <li><a href="/left-factoring" class="nav-link"><i class="fas fa-cut"></i> Left Factoring</a></li>
-        <li><a href="/lang-to-regex" class="nav-link"><i class="fas fa-language"></i> Lang → Regex</a></li>
-        <li><a href="/regex-to-lang" class="nav-link"><i class="fas fa-regex"></i> Regex → Lang</a></li>
+        <li><a href="/lang-to-regex" class="nav-link"><i class="fas fa-language"></i> Language → Regex</a></li>
+        <li><a href="/regex-to-lang" class="nav-link"><i class="fas fa-regex"></i> Regex → Language</a></li>
         <li><a href="/lr0" class="nav-link"><i class="fas fa-table"></i> LR(0)</a></li>
         <li><a href="/tac" class="nav-link"><i class="fas fa-code"></i> TAC</a></li>
         <li><a href="/cfg" class="nav-link"><i class="fas fa-project-diagram"></i> CFG</a></li>
-      </ul>
-      
-      <div class="nav-toggle">
-        <i class="fas fa-bars"></i>
-      </div>
+      {% endif %}
+    </ul>
+
+    <div class="nav-toggle">
+      <i class="fas fa-bars"></i>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <main class="container">
     {% block content %}{% endblock %}
@@ -62,9 +73,15 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>Made with <i class="fas fa-heart"></i> for the Compiler Learning Community</p>
-    </div>
+   <div class="footer-bottom">
+  <p>
+    © 2025 Compiler Learning Hub. Made with <i class="fas fa-heart" style="color:red;"></i> by 
+    <a href="https://github.com/MNR-Tushar" target="_blank">Naimur</a> &amp; 
+    <a href="https://github.com/sajjadwho" target="_blank">Shemanto</a>
+  </p>
+</div>
+
+
   </footer>
 
   <script src="/static/js/main.js"></script>
