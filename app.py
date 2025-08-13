@@ -1,4 +1,5 @@
 # app.py
+import os
 from flask import Flask, render_template, request, jsonify
 from algos.grammar_utils import parse_grammar, build_ll1_table
 
