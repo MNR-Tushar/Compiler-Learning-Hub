@@ -12,6 +12,10 @@ def index():
 @app.route('/tools')
 def tools():
     return render_template('tools.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 @app.route('/first-follow')
 def first_follow():
     return render_template('pages/first_follow.html')
