@@ -1,5 +1,5 @@
 // Ambiguity Checker
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const grammarInput = document.getElementById('grammar-input');
     const checkBtn = document.getElementById('check-btn');
     const resultsDiv = document.getElementById('results');
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearBtn = document.getElementById('clear-btn');
 
     // Example ambiguous grammar
-    const exampleGrammar = `E → E + E | E * E | ( E ) | id`;
+    const exampleGrammar = `E -> E + E | E * E | ( E ) | id`;
 
     exampleBtn.addEventListener('click', () => {
         grammarInput.value = exampleGrammar;
@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     checkBtn.addEventListener('click', () => {
-        const grammar = grammarInput.value.trim();
-        if (!grammar) {
+        const grammarText = grammarInput.value.trim();
+        if (!grammarText) {
             showNotification('Please enter a grammar', 'error');
             return;
         }
 
         try {
-            const parsedGrammar = parseGrammar(grammar);
+            const parsedGrammar = parseGrammar(grammarText);
             const analysis = analyzeAmbiguity(parsedGrammar);
             displayResults(analysis, parsedGrammar);
         } catch (error) {
@@ -34,18 +34,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Parse grammar input text into object
+    function parseGrammar(input) {
+        const grammar = {};
+        const lines = input.split('\n').map(line => line.trim()).filter(line => line);
+
+        lines.forEach(line => {
+            const [left, right] = line.split(/->|→/).map(part => part.trim());
+            if (!left || !right) throw new Error("Invalid grammar format. Use 'A -> B | C' syntax.");
+
+            if (!grammar[left]) grammar[left] = [];
+
+            right.split('|').forEach(prod => {
+                const symbols = prod.trim().split(/\s+/).filter(s => s.length > 0);
+                grammar[left].push(symbols);
+            });
+        });
+
+        return grammar;
+    }
+
     function analyzeAmbiguity(grammar) {
         const nonTerminals = Object.keys(grammar);
         const terminals = new Set();
         const nullable = new Set();
         const first = {};
-        const follow = {};
 
-        // Find terminals and compute nullable
+        // Find terminals and initialize FIRST sets
         for (const [nt, prods] of Object.entries(grammar)) {
             first[nt] = new Set();
-            follow[nt] = new Set();
-            
             for (const prod of prods) {
                 if (prod.length === 0) {
                     nullable.add(nt);
@@ -75,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         for (const symbol of prod) {
                             if (nonTerminals.includes(symbol)) {
                                 const before = first[nt].size;
-                                first[nt].update(first[symbol]);
+                                for (let val of first[symbol]) first[nt].add(val);
                                 if (first[nt].size !== before) changed = true;
                                 if (!nullable.has(symbol)) {
                                     allNullable = false;
@@ -99,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Check for conflicts
+        // Check for FIRST-FIRST conflicts
         const conflicts = [];
         for (const [nt, prods] of Object.entries(grammar)) {
             const firstSets = prods.map(prod => {
@@ -108,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let allNullable = true;
                 for (const symbol of prod) {
                     if (nonTerminals.includes(symbol)) {
-                        result.update(first[symbol]);
+                        for (let val of first[symbol]) result.add(val);
                         if (!nullable.has(symbol)) {
                             allNullable = false;
                             break;
@@ -123,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return result;
             });
 
-            // Check for overlapping FIRST sets
             for (let i = 0; i < firstSets.length; i++) {
                 for (let j = i + 1; j < firstSets.length; j++) {
                     const intersection = new Set([...firstSets[i]].filter(x => firstSets[j].has(x)));
@@ -151,10 +167,9 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    function displayResults(analysis, parsedGrammar) {
+    function displayResults(analysis) {
         resultsDiv.innerHTML = '';
 
-        // Grammar info
         const infoSection = document.createElement('div');
         infoSection.className = 'result-section';
         infoSection.innerHTML = `
@@ -166,95 +181,66 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         resultsDiv.appendChild(infoSection);
 
-        // FIRST sets
         const firstSection = document.createElement('div');
         firstSection.className = 'result-section';
         firstSection.innerHTML = '<h3>FIRST Sets</h3>';
-        
-        const firstData = Object.entries(analysis.first).map(([nt, firstSet) => [
-            nt, 
-            Array.from(firstSet).sort().join(', ')
-        ]);
-        const firstTable = createTable(['Non-terminal', 'FIRST Set'], firstData);
+
+        const firstTable = createTable(
+            ['Non-terminal', 'FIRST Set'],
+            Object.entries(analysis.first).map(([nt, set]) => [nt, Array.from(set).sort().join(', ')])
+        );
         firstSection.appendChild(firstTable);
         resultsDiv.appendChild(firstSection);
 
-        // Conflicts
         if (analysis.conflicts.length > 0) {
             const conflictsSection = document.createElement('div');
             conflictsSection.className = 'result-section';
             conflictsSection.innerHTML = '<h3>Ambiguity Conflicts</h3>';
-            
-            const conflictsData = analysis.conflicts.map(conflict => [
-                conflict.nonTerminal,
-                conflict.production1.length === 0 ? 'ε' : conflict.production1.join(' '),
-                conflict.production2.length === 0 ? 'ε' : conflict.production2.join(' '),
-                conflict.conflictSymbols.join(', '),
-                conflict.type
-            ]);
-            
-            const conflictsTable = createTable([
-                'Non-terminal', 'Production 1', 'Production 2', 'Conflict Symbols', 'Type'
-            ], conflictsData);
+
+            const conflictsTable = createTable(
+                ['Non-terminal', 'Production 1', 'Production 2', 'Conflict Symbols', 'Type'],
+                analysis.conflicts.map(c => [
+                    c.nonTerminal,
+                    c.production1.join(' '),
+                    c.production2.join(' '),
+                    c.conflictSymbols.join(', '),
+                    c.type
+                ])
+            );
             conflictsSection.appendChild(conflictsTable);
             resultsDiv.appendChild(conflictsSection);
         }
-
-        // Suggestions
-        if (analysis.isAmbiguous) {
-            const suggestionsSection = document.createElement('div');
-            suggestionsSection.className = 'result-section';
-            suggestionsSection.innerHTML = `
-                <h3>Suggestions to Remove Ambiguity</h3>
-                <ul>
-                    <li>Use operator precedence rules</li>
-                    <li>Introduce intermediate non-terminals</li>
-                    <li>Use left or right associativity</li>
-                    <li>Restructure grammar to be unambiguous</li>
-                </ul>
-            `;
-            resultsDiv.appendChild(suggestionsSection);
-        }
-
-        // Download button
-        const downloadBtn = document.createElement('button');
-        downloadBtn.textContent = 'Download Analysis';
-        downloadBtn.className = 'download-btn';
-        downloadBtn.onclick = () => {
-            const content = generateReport(analysis);
-            downloadAsText(content, 'ambiguity_analysis.txt');
-        };
-        resultsDiv.appendChild(downloadBtn);
     }
 
-    function generateReport(analysis) {
-        let report = `Grammar Ambiguity Analysis\n`;
-        report += `==========================\n\n`;
-        
-        report += `Grammar:\n`;
-        report += formatGrammar(analysis.grammar);
-        report += `\n\n`;
-        
-        report += `Analysis Results:\n`;
-        report += `- Non-terminals: ${analysis.nonTerminals.join(', ')}\n`;
-        report += `- Terminals: ${analysis.terminals.join(', ')}\n`;
-        report += `- Nullable symbols: ${analysis.nullable.join(', ')}\n`;
-        report += `- Ambiguous: ${analysis.isAmbiguous ? 'Yes' : 'No'}\n\n`;
-        
-        report += `FIRST Sets:\n`;
-        Object.entries(analysis.first).forEach(([nt, firstSet) => {
-            report += `${nt}: {${Array.from(firstSet).sort().join(', ')}}\n`;
+    // Helper function to create HTML tables
+    function createTable(headers, rows) {
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const tr = document.createElement('tr');
+        headers.forEach(h => {
+            const th = document.createElement('th');
+            th.textContent = h;
+            tr.appendChild(th);
         });
-        
-        if (analysis.conflicts.length > 0) {
-            report += `\nConflicts:\n`;
-            analysis.conflicts.forEach((conflict, i) => {
-                report += `${i + 1}. ${conflict.nonTerminal}: ${conflict.production1.join(' ')} vs ${conflict.production2.join(' ')}\n`;
-                report += `   Conflict symbols: {${conflict.conflictSymbols.join(', ')}}\n`;
-                report += `   Type: ${conflict.type}\n\n`;
+        thead.appendChild(tr);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        rows.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
             });
-        }
-        
-        return report;
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        return table;
     }
-}); 
+
+    // Dummy notification function
+    function showNotification(message, type) {
+        alert(`${type.toUpperCase()}: ${message}`);
+    }
+});

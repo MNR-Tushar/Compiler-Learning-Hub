@@ -1,4 +1,4 @@
-// Language to Regular Expression Converter
+// Language to Regular Expression Converter (Improved)
 document.addEventListener('DOMContentLoaded', function() {
     const languageInput = document.getElementById('language-input');
     const convertBtn = document.getElementById('convert-btn');
@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const exampleBtn = document.getElementById('example-btn');
     const clearBtn = document.getElementById('clear-btn');
 
-    // Example language descriptions
     const examples = [
         {
             name: "Strings starting with 'a' and ending with 'b'",
@@ -53,74 +52,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function analyzeLanguage(description) {
         const analysis = {
-            description: description,
+            description,
             alphabet: new Set(),
             constraints: [],
-            patterns: [],
-            length: null,
             startSymbol: null,
             endSymbol: null,
             forbidden: [],
-            required: []
+            required: [],
+            length: null
         };
 
-        // Extract alphabet
-        const alphabetMatch = description.match(/\{([^}]+)\}/g);
+        const alphabetMatch = description.match(/\{([^}]+)\}/);
         if (alphabetMatch) {
-            alphabetMatch.forEach(match => {
-                const symbols = match.slice(1, -1).split(',').map(s => s.trim());
-                symbols.forEach(symbol => analysis.alphabet.add(symbol));
-            });
+            alphabetMatch[1].split(',').map(s => s.trim()).forEach(sym => analysis.alphabet.add(sym));
         }
 
-        // Extract common patterns
-        if (description.includes("start with")) {
-            const startMatch = description.match(/start with ['"`]([^'"`])['"`]/);
-            if (startMatch) {
-                analysis.startSymbol = startMatch[1];
-                analysis.constraints.push("starts with " + startMatch[1]);
-            }
+        const startMatch = description.match(/start with ['"`]([^'"`])['"`]/);
+        if (startMatch) {
+            analysis.startSymbol = startMatch[1];
+            analysis.constraints.push("starts with " + startMatch[1]);
         }
 
-        if (description.includes("end with")) {
-            const endMatch = description.match(/end with ['"`]([^'"`])['"`]/);
-            if (endMatch) {
-                analysis.endSymbol = endMatch[1];
-                analysis.constraints.push("ends with " + endMatch[1]);
-            }
+        const endMatch = description.match(/end with ['"`]([^'"`])['"`]/);
+        if (endMatch) {
+            analysis.endSymbol = endMatch[1];
+            analysis.constraints.push("ends with " + endMatch[1]);
         }
 
-        if (description.includes("even number")) {
-            analysis.constraints.push("even count");
-        }
+        if (/even number/.test(description)) analysis.constraints.push("even count");
+        if (/odd number/.test(description)) analysis.constraints.push("odd count");
 
-        if (description.includes("odd number")) {
-            analysis.constraints.push("odd count");
-        }
+        const forbiddenMatches = [...description.matchAll(/(?:don't|doesn't) contain ['"`]([^'"`]+)['"`]/g)];
+        forbiddenMatches.forEach(m => {
+            analysis.forbidden.push(m[1]);
+            analysis.constraints.push("forbidden substring: " + m[1]);
+        });
 
-        if (description.includes("don't contain") || description.includes("doesn't contain")) {
-            const forbiddenMatch = description.match(/don't contain ['"`]([^'"`]+)['"`]/);
-            if (forbiddenMatch) {
-                analysis.forbidden.push(forbiddenMatch[1]);
-                analysis.constraints.push("forbidden substring: " + forbiddenMatch[1]);
-            }
-        }
+        const requiredMatches = [...description.matchAll(/contain ['"`]([^'"`]+)['"`]/g)];
+        requiredMatches.forEach(m => {
+            analysis.required.push(m[1]);
+            analysis.constraints.push("required substring: " + m[1]);
+        });
 
-        if (description.includes("contain")) {
-            const requiredMatch = description.match(/contain ['"`]([^'"`]+)['"`]/);
-            if (requiredMatch) {
-                analysis.required.push(requiredMatch[1]);
-                analysis.constraints.push("required substring: " + requiredMatch[1]);
-            }
-        }
-
-        // Extract length constraints
-        if (description.includes("length")) {
-            const lengthMatch = description.match(/length is (\w+)/);
-            if (lengthMatch) {
-                analysis.length = lengthMatch[1];
-                analysis.constraints.push("length constraint: " + lengthMatch[1]);
-            }
+        const lengthMatch = description.match(/length is (\w+)/);
+        if (lengthMatch) {
+            analysis.length = lengthMatch[1];
+            analysis.constraints.push("length constraint: " + lengthMatch[1]);
         }
 
         return analysis;
@@ -128,49 +105,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function generateRegex(analysis) {
         let regex = "";
-        const alphabet = Array.from(analysis.alphabet).join('|');
-        
-        if (analysis.alphabet.size === 0) {
-            // Default to binary if no alphabet specified
-            analysis.alphabet.add('0');
-            analysis.alphabet.add('1');
+        const alphabet = Array.from(analysis.alphabet);
+        if (alphabet.length === 0) {
+            alphabet.push('0','1'); // default
+        }
+        const alphaRegex = alphabet.map(escapeRegex).join('|');
+
+        // Start + End
+        if (analysis.startSymbol && analysis.endSymbol) {
+            regex = `${escapeRegex(analysis.startSymbol)}(${alphaRegex})*${escapeRegex(analysis.endSymbol)}`;
+        } else if (analysis.startSymbol) {
+            regex = `${escapeRegex(analysis.startSymbol)}(${alphaRegex})*`;
+        } else if (analysis.endSymbol) {
+            regex = `(${alphaRegex})*${escapeRegex(analysis.endSymbol)}`;
+        } else {
+            regex = `(${alphaRegex})*`;
         }
 
-        // Handle different constraint types
-        if (analysis.startSymbol && analysis.endSymbol) {
-            regex = `${escapeRegex(analysis.startSymbol)}(${alphabet})*${escapeRegex(analysis.endSymbol)}`;
-        } else if (analysis.startSymbol) {
-            regex = `${escapeRegex(analysis.startSymbol)}(${alphabet})*`;
-        } else if (analysis.endSymbol) {
-            regex = `(${alphabet})*${escapeRegex(analysis.endSymbol)}`;
-        } else if (analysis.constraints.includes("even count")) {
-            // Even number of 1s in binary
-            regex = `(0*10*10*)*`;
-        } else if (analysis.constraints.includes("odd count")) {
-            // Odd number of 1s in binary
-            regex = `(0*10*10*)*0*10*`;
-        } else if (analysis.forbidden.length > 0) {
-            // Avoid forbidden substrings
-            const forbidden = analysis.forbidden[0];
-            if (forbidden === "11") {
-                regex = `(0|10)*`;
-            } else if (forbidden === "00") {
-                regex = `(1|01)*`;
-            } else {
-                regex = `(${alphabet})*`;
-            }
-        } else if (analysis.required.length > 0) {
-            // Must contain required substrings
-            const required = analysis.required[0];
-            regex = `(${alphabet})*${escapeRegex(required)}(${alphabet})*`;
-        } else if (analysis.length === "even") {
-            regex = `(${alphabet}{2})*`;
-        } else if (analysis.length === "odd") {
-            regex = `${alphabet}(${alphabet}{2})*`;
-        } else {
-            // Default: any string over the alphabet
-            regex = `(${alphabet})*`;
-        }
+        // Forbidden substrings
+        analysis.forbidden.forEach(f => {
+            if (f === "11") regex = `(0|10)*`;
+            if (f === "00") regex = `(1|01)*`;
+        });
+
+        // Required substrings
+        analysis.required.forEach(r => {
+            regex = `(${alphaRegex})*${escapeRegex(r)}(${alphaRegex})*`;
+        });
+
+        // Even/Odd length
+        if (analysis.length === "even") regex = `(${alphaRegex}{2})*`;
+        if (analysis.length === "odd") regex = `${alphaRegex}(${alphaRegex}{2})*`;
+
+        // Even/Odd count (only binary supported)
+        if (analysis.constraints.includes("even count")) regex = `(0*10*10*)*`;
+        if (analysis.constraints.includes("odd count")) regex = `(0*10*10*)*0*10*`;
 
         return regex;
     }
@@ -182,30 +151,25 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayResults(analysis, regex) {
         resultsDiv.innerHTML = '';
 
-        // Analysis summary
         const summarySection = document.createElement('div');
         summarySection.className = 'result-section';
         summarySection.innerHTML = `
             <h3>Language Analysis</h3>
             <p><strong>Description:</strong> ${analysis.description}</p>
-            <p><strong>Alphabet:</strong> {${Array.from(analysis.alphabet).join(', ')}</p>
+            <p><strong>Alphabet:</strong> {${Array.from(analysis.alphabet).join(', ')}}</p>
             <p><strong>Constraints:</strong> ${analysis.constraints.length > 0 ? analysis.constraints.join(', ') : 'None'}</p>
         `;
         resultsDiv.appendChild(summarySection);
 
-        // Generated regex
         const regexSection = document.createElement('div');
         regexSection.className = 'result-section';
         regexSection.innerHTML = `
             <h3>Generated Regular Expression</h3>
-            <div class="regex-display">
-                <code>${regex}</code>
-            </div>
+            <div class="regex-display"><code>${regex}</code></div>
             <p><strong>Explanation:</strong> ${explainRegex(regex, analysis)}</p>
         `;
         resultsDiv.appendChild(regexSection);
 
-        // Test examples
         const testSection = document.createElement('div');
         testSection.className = 'result-section';
         testSection.innerHTML = `
@@ -216,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         resultsDiv.appendChild(testSection);
 
-        // Download button
         const downloadBtn = document.createElement('button');
         downloadBtn.textContent = 'Download Results';
         downloadBtn.className = 'download-btn';
@@ -228,74 +191,57 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function explainRegex(regex, analysis) {
-        if (regex.includes("start")) {
-            return "This regex ensures the string starts with the specified symbol, followed by any sequence of alphabet symbols, and ends with the specified symbol.";
-        } else if (regex.includes("even count")) {
-            return "This regex generates strings with an even number of 1s by grouping pairs of 1s with any number of 0s in between.";
-        } else if (regex.includes("forbidden")) {
-            return "This regex avoids the forbidden substring by carefully structuring the pattern to prevent its occurrence.";
-        } else if (regex.includes("required")) {
-            return "This regex ensures the required substring appears somewhere in the string, with any symbols before and after.";
-        } else {
-            return "This regex generates all possible strings over the given alphabet.";
-        }
+        let explanation = [];
+        if (analysis.startSymbol) explanation.push(`Starts with '${analysis.startSymbol}'`);
+        if (analysis.endSymbol) explanation.push(`Ends with '${analysis.endSymbol}'`);
+        if (analysis.forbidden.length > 0) explanation.push(`Avoids forbidden substrings: ${analysis.forbidden.join(', ')}`);
+        if (analysis.required.length > 0) explanation.push(`Must contain: ${analysis.required.join(', ')}`);
+        if (analysis.constraints.includes("even count")) explanation.push("Even number of 1s");
+        if (analysis.constraints.includes("odd count")) explanation.push("Odd number of 1s");
+        if (analysis.length) explanation.push(`Length constraint: ${analysis.length}`);
+        if (explanation.length === 0) explanation.push("Generates all possible strings over the alphabet");
+        return explanation.join('; ') + ".";
     }
 
     function generateTestExamples(regex, analysis) {
         const examples = [];
         const alphabet = Array.from(analysis.alphabet);
-        
-        // Generate some simple test cases
-        if (analysis.startSymbol && analysis.endSymbol) {
-            examples.push(analysis.startSymbol + analysis.endSymbol);
-            examples.push(analysis.startSymbol + alphabet[0] + analysis.endSymbol);
-        }
-        
+        if (analysis.startSymbol && analysis.endSymbol) examples.push(analysis.startSymbol + analysis.endSymbol);
         if (alphabet.length >= 2) {
-            examples.push(alphabet[0] + alphabet[1]);
-            examples.push(alphabet[0] + alphabet[0] + alphabet[1]);
+            examples.push(alphabet[0]+alphabet[1]);
+            examples.push(alphabet[0]+alphabet[0]+alphabet[1]);
         }
-        
-        examples.push(""); // Empty string
-        
+        examples.push("");
         let html = '<div class="test-cases">';
-        examples.forEach(example => {
-            const matches = testRegex(regex, example);
-            html += `<div class="test-case ${matches ? 'match' : 'no-match'}">`;
-            html += `<strong>${example || 'ε'}</strong>: ${matches ? '✓ Matches' : '✗ No match'}`;
-            html += '</div>';
+        examples.forEach(ex => {
+            const matches = testRegex(regex, ex);
+            html += `<div class="test-case ${matches ? 'match' : 'no-match'}"><strong>${ex||'ε'}</strong>: ${matches ? '✓ Matches' : '✗ No match'}</div>`;
         });
         html += '</div>';
-        
         return html;
     }
 
     function testRegex(regex, string) {
-        try {
-            const regexObj = new RegExp('^' + regex + '$');
-            return regexObj.test(string);
-        } catch (e) {
-            return false;
-        }
+        try { return new RegExp('^'+regex+'$').test(string); } 
+        catch(e){ return false; }
     }
 
     function generateReport(analysis, regex) {
-        let report = `Language to Regular Expression Report\n`;
-        report += `=====================================\n\n`;
-        
-        report += `Language Description:\n`;
-        report += `${analysis.description}\n\n`;
-        
-        report += `Analysis:\n`;
-        report += `- Alphabet: {${Array.from(analysis.alphabet).join(', ')}}\n`;
-        report += `- Constraints: ${analysis.constraints.join(', ')}\n\n`;
-        
-        report += `Generated Regular Expression:\n`;
-        report += `${regex}\n\n`;
-        
-        report += `Explanation:\n`;
-        report += `${explainRegex(regex, analysis)}\n`;
-        
-        return report;
+        return `Language to Regular Expression Report
+=====================================
+
+Language Description:
+${analysis.description}
+
+Analysis:
+- Alphabet: {${Array.from(analysis.alphabet).join(', ')}}
+- Constraints: ${analysis.constraints.join(', ')}
+
+Generated Regular Expression:
+${regex}
+
+Explanation:
+${explainRegex(regex, analysis)}
+`;
     }
-}); 
+});

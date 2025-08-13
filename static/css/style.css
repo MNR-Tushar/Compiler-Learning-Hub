@@ -13,7 +13,8 @@
     --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-*{ box-sizing:border-box }
+*{ box-sizing:border-box ;
+   text-decoration: none;}
 
 body{ 
     margin:0; 
@@ -22,6 +23,7 @@ body{
     color:#111;
     line-height: 1.6;
 }
+
 
 /* Enhanced Navigation */
 .topnav{ 
@@ -38,8 +40,8 @@ body{
     margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
+    justify-content: space-evenly;
+    padding: 15px 20px;
 }
 
 .topnav .brand{ 
@@ -107,7 +109,7 @@ body{
     padding: 3rem 0;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     border-radius: 20px;
-    margin: 2rem 0 4rem 0;
+    
 }
 
 .hero-content {

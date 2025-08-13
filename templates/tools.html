@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Compiler Learning Hub{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <nav class="topnav">
+  <div class="nav-container">
+    <div class="brand">
+      <i class="fas fa-code"></i>
+      <span>Compiler Learning Hub</span>
+    </div>
+
+    <ul class="navlinks">
+      {% if request.path == '/' %}
+        <!-- Home page navbar -->
+        <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="/tools" class="nav-link"><i class="fas fa-tools"></i> Tools</a></li>
+        <li><a href="/about" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+      {% else %}
+        <!-- All pages (Tools page, etc.) -->
+        <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="/first-follow" class="nav-link"><i class="fas fa-calculator"></i> FIRST, FOLLOW & LL(1)</a></li>
+        <li><a href="/ambiguity" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Ambiguity</a></li>
+        <li><a href="/left-recursion" class="nav-link"><i class="fas fa-undo"></i> Left Recursion</a></li>
+        <li><a href="/left-factoring" class="nav-link"><i class="fas fa-cut"></i> Left Factoring</a></li>
+        <li><a href="/lang-to-regex" class="nav-link"><i class="fas fa-language"></i> Language → Regex</a></li>
+        <li><a href="/regex-to-lang" class="nav-link"><i class="fas fa-regex"></i> Regex → Language</a></li>
+        <li><a href="/lr0" class="nav-link"><i class="fas fa-table"></i> LR(0)</a></li>
+        <li><a href="/tac" class="nav-link"><i class="fas fa-code"></i> TAC</a></li>
+        <li><a href="/cfg" class="nav-link"><i class="fas fa-project-diagram"></i> CFG</a></li>
+      {% endif %}
+    </ul>
+
+    <div class="nav-toggle">
+      <i class="fas fa-bars"></i>
+    </div>
+  </div>
+</nav>
+
+  <main class="container">
+      <section class="features-section">
+    <h2>Learning Tools</h2>
+    <div class="home-grid">
+      <a class="card" href="/first-follow">
+        <div class="card-icon">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <h3>FIRST & FOLLOW Sets</h3>
+        <p>Compute FIRST and FOLLOW sets for context-free grammars and generate LL(1) parsing tables</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/ambiguity">
+        <div class="card-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Ambiguity Checker</h3>
+        <p>Detect and analyze grammar ambiguity through systematic conflict detection</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/left-recursion">
+        <div class="card-icon">
+          <i class="fas fa-undo"></i>
+        </div>
+        <h3>Left Recursion</h3>
+        <p>Eliminate direct and indirect left recursion to make grammars suitable for top-down parsing</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/left-factoring">
+        <div class="card-icon">
+          <i class="fas fa-cut"></i>
+        </div>
+        <h3>Left Factoring</h3>
+        <p>Apply left factoring to eliminate common prefixes and improve parsing efficiency</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/lang-to-regex">
+        <div class="card-icon">
+          <i class="fas fa-language"></i>
+        </div>
+        <h3>Language → Regular Expression</h3>
+        <p>Convert formal language descriptions to regular expressions using systematic approaches</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/regex-to-lang">
+        <div class="card-icon">
+          <i class="fas fa-regex"></i>
+        </div>
+        <h3>Regular Expression → Language</h3>
+        <p>Understand what regular expressions represent and convert them to formal language descriptions</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/lr0">
+        <div class="card-icon">
+          <i class="fas fa-table"></i>
+        </div>
+        <h3>LR(0) Parser</h3>
+        <p>Generate LR(0) parsing tables and analyze shift-reduce conflicts for bottom-up parsing</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/tac">
+        <div class="card-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3>Three Address Code</h3>
+        <p>Convert arithmetic expressions and statements to three address code representation</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+      
+      <a class="card" href="/cfg">
+        <div class="card-icon">
+          <i class="fas fa-project-diagram"></i>
+        </div>
+        <h3>Control Flow Graph</h3>
+        <p>Generate control flow graphs from three address code with basic block analysis</p>
+        <div class="card-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4><i class="fas fa-graduation-cap"></i> Compiler Learning Hub</h4>
+        <p>Interactive tools for learning compiler theory and language design</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/first-follow">FIRST & FOLLOW</a></li>
+          <li><a href="/ambiguity">Ambiguity Checker</a></li>
+          <li><a href="/lr0">LR(0) Parser</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Features</h4>
+        <ul>
+          <li>Grammar Analysis</li>
+          <li>Parsing Algorithms</li>
+          <li>Code Generation</li>
+        </ul>
+      </div>
+    </div>
+   <div class="footer-bottom">
+  <p>
+    © 2025 Compiler Learning Hub. Made with <i class="fas fa-heart" style="color:red;"></i> by 
+    <a href="https://github.com/MNR-Tushar" target="_blank">Naimur</a> &amp; 
+    <a href="https://github.com/sajjadwho" target="_blank">Shemanto</a>
+  </p>
+</div>
+
+
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+  
+  <script>
+    // Mobile navigation toggle
+    document.querySelector('.nav-toggle').addEventListener('click', function() {
+      document.querySelector('.navlinks').classList.toggle('active');
+    });
+    
+    // Active navigation highlighting
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
