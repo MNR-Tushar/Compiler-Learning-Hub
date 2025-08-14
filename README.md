@@ -1,6 +1,12 @@
 # 🚀 Compiler Learning Hub
 
 A comprehensive, interactive web application for learning compiler theory concepts through hands-on tools and visualizations.
+--
+Explore our interactive tools and visualizations to master compiler theory and language design.
+
+🔗 Visit the live application: [compiler-learninghub.onrender.com](https://compiler-learninghub.onrender.com)
+--
+
 
 ## ✨ Features
 
@@ -29,7 +35,6 @@ A comprehensive, interactive web application for learning compiler theory concep
 - **Backend**: Flask (Python 3.8+)
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
 - **Algorithms**: Custom Python implementations for compiler theory
-- **Architecture**: RESTful API with modular design
 - **Styling**: Modern CSS with responsive design
 
 ## 🚀 Getting Started
@@ -42,7 +47,7 @@ A comprehensive, interactive web application for learning compiler theory concep
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/MNR-Tushar/Compiler-Learning-Hub.git>
    cd compiler-learning-hub
    ```
 
@@ -70,40 +75,6 @@ A comprehensive, interactive web application for learning compiler theory concep
 5. **Open your browser**
    Navigate to `http://localhost:5000`
 
-## 📚 Usage Examples
-
-### FIRST & FOLLOW Sets
-```
-Input Grammar:
-E → T E'
-E' → + T E' | ε
-T → F T'
-T' → * F T' | ε
-F → ( E ) | id
-
-Start Symbol: E
-```
-
-### Left Recursion Elimination
-```
-Input:
-E → E + T | T
-T → T * F | F
-F → ( E ) | id
-
-Output:
-E → T E'
-E' → + T E' | ε
-T → F T'
-T' → * F T' | ε
-F → ( E ) | id
-```
-
-### Language to Regex
-```
-Input: "Strings over {0,1} with even number of 1s"
-Output: (0*10*10*)*
-```
 
 ## 🎯 Learning Objectives
 
@@ -134,11 +105,6 @@ compiler-learning-hub/
 │   └── pages/            # Individual page templates
 └── requirements.txt       # Python dependencies
 ```
-
-## 🔧 API Endpoints
-
-- `POST /api/compute` - Compute FIRST and FOLLOW sets
-- All other routes serve HTML pages for interactive tools
 
 ## 🎨 UI/UX Features
 
@@ -197,4 +163,4 @@ If you have any questions or need help:
 
 ---
 
-**Made with ❤️ for the Compiler Learning Community** 
+** © 2025 Compiler Learning Hub. Made by Naimur & Shemanto** 
